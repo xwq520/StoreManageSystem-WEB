@@ -6,34 +6,35 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="handle-box">
-                <el-input v-model="select_word" placeholder="输入姓名，手机号，用户ID" class="handle-input mr10"></el-input>
+            <div class="p-handle-box">
+                <el-input v-model="searchContant" placeholder="输入姓名，手机号，用户ID" class="p-handle-input mr10"></el-input>
                 <el-button type="primary" class="el-icon-search"  @click="search"></el-button>
                 <el-button type="success" class="el-icon-plus"  @click="addUsers"></el-button>
             </div>
-            <el-table :data="data" height="600" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
+
+            <el-table :data="tableData" height="600" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" fixed="left"></el-table-column>
-                <el-table-column prop="name" label="姓名"  width="100">
+                <el-table-column prop="userName" label="姓名"  width="150">
                 </el-table-column>
-                <el-table-column prop="date" label="手机号" width="100">
+                <el-table-column prop="userPhone" label="手机号" width="150">
                 </el-table-column>
-                <el-table-column prop="name" label="性别" width="50">
+                <!--<el-table-column prop="userSexName" label="性别" width="80">-->
+                <!--</el-table-column>-->
+                <el-table-column prop="userId" label="用户ID"  width="150">
                 </el-table-column>
-                <el-table-column prop="name" label="用户ID"  width="120">
+                <!--<el-table-column prop="registerTime" label="登录密码"  width="150" >-->
+                <!--</el-table-column>-->
+                <el-table-column prop="securityCode" label="验证码"  width="80" >
                 </el-table-column>
-                <el-table-column prop="date" label="登录密码"  width="150" >
+                <el-table-column prop="registerTime" label="注册时间" sortable width="180">
                 </el-table-column>
-                <el-table-column prop="date" label="验证码"  width="80" >
+                <el-table-column prop="lastTime" label="最后登录时间" width="180">
                 </el-table-column>
-                <el-table-column prop="date" label="注册时间" sortable width="150">
-                </el-table-column>
-                <el-table-column prop="date" label="最后登录时间" width="150">
-                </el-table-column>
-                <el-table-column prop="date" label="操作者"   width="100">
-                </el-table-column>
-                <el-table-column prop="date" label="操作时间"   width="150">
-                </el-table-column>
-                <el-table-column label="操作" width="150"  fixed="right">
+                <!--<el-table-column prop="updaterName" label="更新者"   width="150">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column prop="updateTime" label="更新时间"   width="180">-->
+                <!--</el-table-column>-->
+                <el-table-column label="操作"  fixed="right">
                     <template slot-scope="scope">
                         <!--   <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
                         <el-button size="small" @click="goEditDetail(scope.$index, scope.row)">编辑</el-button>
@@ -42,13 +43,13 @@
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
+                <el-pagination @current-change="handleCurrentChange" layout="prev, pager, next" :total="total">
                 </el-pagination>
             </div>
         </div>
 
         <!--用户详情 编辑弹出框 -->
-        <el-dialog title="新增/编辑" :visible.sync="editVisible" width="55%" :before-close="handleClose">
+        <el-dialog title="新增/编辑" :visible.sync="editVisible" width="40%" :before-close="handleClose">
             <div>
                 <div class="container">
                     <div class="form-box">
@@ -57,22 +58,22 @@
                                 <el-input v-model="form.name"></el-input>
                             </el-form-item>
                             <el-form-item label="手机号" required>
-                                <el-input type="number" maxlength = '11' v-model="form.name"></el-input>
+                                <el-input type="number" maxlength = '11' v-model="form.phone"></el-input>
                             </el-form-item>
-                            <el-form-item label="选择性别" >
-                                <el-select v-model="form.region" placeholder="请选择">
-                                    <el-option key="man" label="男" value="1" selected="selected"></el-option>
-                                    <el-option key="woman" label="女" value="0"></el-option>
-                                </el-select>
-                            </el-form-item>
+                            <!--<el-form-item label="选择性别" >-->
+                                <!--<el-select v-model="form.sex" placeholder="请选择">-->
+                                    <!--<el-option key="man" label="男" value="1" selected="selected"></el-option>-->
+                                    <!--<el-option key="woman" label="女" value="0"></el-option>-->
+                                <!--</el-select>-->
+                            <!--</el-form-item>-->
                             <el-form-item label="用户ID" required>
-                                <el-input v-model="form.name"></el-input>
+                                <el-input v-model="form.userId"></el-input>
                             </el-form-item>
-                            <el-form-item label="登录密码" required>
+                            <el-form-item label="登录密码">
                                 <el-input type="password" v-model="form.pwd"></el-input>
                             </el-form-item>
-                            <el-form-item label="确认密码" required >
-                                <el-input type="password" v-model="form.pwd" auto-complete="off"></el-input>
+                            <el-form-item label="确认密码">
+                                <el-input type="password" v-model="form.confimPwd" auto-complete="off"></el-input>
                             </el-form-item>
                             <el-form-item style="margin-top: 20px;text-align: right">
                                 <el-button type="primary" @click="saveEdit" >确定</el-button>
@@ -86,93 +87,107 @@
 
         <!-- 删除提示框 -->
         <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
+            <div class="p-del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false">取 消</el-button>
                 <el-button type="primary" @click="deleteRow">确 定</el-button>
             </span>
         </el-dialog>
      </div>
-    </div>
+
 </template>
 
 <script>
+    import {post} from '../common/HttpUtils';
     export default {
         data: function(){
           return {
-                url: './static/vuetable.json',
-                tableData: [],
-                cur_page: 1,
-                multipleSelection: [],
-                select_word: '',
-                del_list: [],
-                is_search: false,
-                editVisible: false,
-                delVisible: false,
-                form: {
-                    name: '',
-                    date: '',
-                    address: ''
-                },
-                idx: -1,
-                isNewAdd: true
+            tableData: [],
+            cur_page: 1,
+            multipleSelection: [],
+            searchContant: '',
+            del_list: [],
+            is_search: false,
+            editVisible: false,
+            delVisible: false,
+            form: {
+                name: '',
+                phone: '',
+              //  sex: '1',
+                userId: '',
+                pwd: '',
+                confimPwd: ''
+            },
+            idx: -1,
+            isNewAdd: true,
+            total:0
             }
         },
         created() {
-            this.getData();
+            this.getData({});
         },
         computed: {
-            data() {
+          /*  data() {
                 return this.tableData.filter((d) => {
-                        let is_del = false;
+                     let is_del = false;
                 for (let i = 0; i < this.del_list.length; i++) {
-                    if (d.name === this.del_list[i].name) {
+                    if (d.userName === this.del_list[i].userName) {
                         is_del = true;
                         break;
                     }
-                }
-                if (!is_del) {
-                    if ((d.name.indexOf(this.select_word) > -1 ||
-                        d.address.indexOf(this.select_word) > -1)
-                    ) {
-                        return d;
-                    }
-                }
+                 }
+                 // console.log("ddjddddd")
+                 // if (!is_del) {
+                 //    if ((d.userName.indexOf(this.searchContant)) > -1){
+                 //        return d;
+                 //    }
+                 // }
             })
-            }
+            }*/
         },
         methods: {
             // 分页导航
             handleCurrentChange(val) {
                 this.cur_page = val;
-                this.getData();
+                this.getData({});
             },
             // 获取 easy-mock 的模拟数据
-            getData() {
-                // 开发环境使用 easy-mock 数据，正式环境使用 json 文件
-                if (process.env.NODE_ENV === 'development') {
-                    this.url = '/ms/table/list';
-                };
-                this.$axios.post(this.url, {
-                    page: this.cur_page
-                }).then((res) => {
-                    this.tableData = res.data.list;
-            })
+            getData(parms) {
+                post({
+                    url: "api/user/list",
+                    curPage: this.cur_page,
+                    data: parms,
+                    success: (res) => {
+                        if (res && res.code > 0) {
+                            this.tableData = res.userList;
+                            this.total = res.total;
+                        }
+                    },
+                    error: (err) => {
+                    }
+                    }
+                );
             },
             search() {
+                this.tableData = []
                 this.is_search = true;
+                this.cur_page = 1
+                console.log("search")
+                this.getData({"searchContant":this.searchContant});
             },
             filterTag(value, row) {
                 return row.tag === value;
             },
             handleEdit(index, row) {
-                this.idx = index;
+
                 const item = this.tableData[index];
+                this.idx = item.id;
                 this.form = {
-                    name: item.name,
-                    date: item.date,
+                    phone: item.userPhone,
+              //      sex: item.userSex,
+                    userId: item.userId,
                     pwd: '',
-                    address: item.address
+                    confimPwd: ''
                 }
                 this.editVisible = true;
             },
@@ -180,18 +195,29 @@
                 this.isNewAdd = false
                 // alert(row.name)
                 //  this.$router.push({name:'/goodsDetails',params:{"row":row}});
-                this.idx = index;
                 const item = this.tableData[index];
+                this.idx = item.id;
+                // name: '',
+                //     phone: '',
+                //     sex: '1',
+                //     userId: '',
+                //     pwd: '',
+                //     confimPwd: ''
                 this.form = {
-                    name: item.name,
-                    date: item.date,
-                    address: item.address
+                    name: item.userName,
+                    phone: item.userPhone,
+                   // sex: item.userSex,
+                    userId: item.userId,
+                    pwd: '',
+                    confimPwd: ''
                 }
                 this.editVisible = true;
             },
             handleDelete(index, row) {
-                this.idx = index;
+                const item = this.tableData[index];
+                this.idx = item.userId;
                 this.delVisible = true;
+
             },
             delAll() {
                 const length = this.multipleSelection.length;
@@ -208,21 +234,69 @@
             },
             // 保存编辑
             saveEdit() {
-                if(this.isNewAdd){
-                    this.$set(this.tableData, 0, this.form);
-                    this.$message.success('新增用户成功！');
-                }else{
-                    this.$set(this.tableData, this.idx, this.form);
-                    this.$message.success(`修改第 ${this.idx+1} 行成功`);
+                if(this.form.pwd != this.form.confimPwd){
+                    this.$message.error('两次输入密码不一致！');
+                    return;
                 }
+                let url = '',id=''
+                if(this.isNewAdd){
+                    url = "api/user/add"
+                }else{
+                    url = "api/user/update"
+                    id = this.idx
+                   // this.$set(this.tableData, this.idx, this.form);
+                   // this.$message.success(`修改第 ${this.idx+1} 行成功`);
+                }
+                // this.$set(this.tableData, 0, this.form);
+                post({
+                    url: url,
+                    // curPage: this.cur_page,
+                    data: {
+                        "id":id,
+                        "userName":this.form.name,
+                        "userPhone":this.form.phone,
+                      //  "userSex":this.form.sex,
+                        "userId":this.form.userId,
+                        "password":this.form.pwd,
+                    },
+                    success: (res) => {
+                        if (res && res.code > 0) {
+                            if(this.isNewAdd) {
+                                this.$message.success(`新增用户【 ${this.form.name} 】成功！`);
+                                this.cur_page = 1
+                            }else{
+                                this.$message.success(`修改用户信息 ${this.form.name} 成功！`);
+                            }
+                            this.getData({});
+                        }
+                    },
+                    error: (err) => {
+                    }
+                    }
+                );
                 this.editVisible = false;
                 this.isNewAdd = false;
             },
             // 确定删除
             deleteRow(){
-                this.tableData.splice(this.idx, 1);
-                this.$message.success('删除成功');
-                this.delVisible = false;
+                post({
+                    url: `/api/user/delete/${this.idx}`,
+                    // curPage: this.cur_page,
+                    data: { },
+                    success: (res) => {
+                        if (res && res.code > 0) {
+                            this.cur_page = 1
+
+                           // this.tableData.splice(this.idx, 1);
+                            this.$message.success('删除成功');
+                            this.delVisible = false;
+                            this.getData({});
+                        }
+                    },
+                    error: (err) => {
+                    }
+                }
+                );
             },
             handleClose(done) {
                 this.$confirm('编辑中，确定关闭吗？', '提示', {
@@ -252,20 +326,20 @@
     }
 </script>
 
-<style scoped>
-    .handle-box {
+<style>
+    .p-handle-box {
         margin-bottom: 20px;
     }
 
-    .handle-select {
-        width: 120px;
+    .el-message-box{
+        border-radius: 0;
     }
 
-    .handle-input {
+    .p-handle-input {
         width: 300px;
         display: inline-block;
     }
-    .del-dialog-cnt{
+    .p-del-dialog-cnt{
         font-size: 16px;
         text-align: center
     }
