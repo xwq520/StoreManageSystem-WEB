@@ -7,6 +7,7 @@
         </div>
         <div class="container">
             <div class="p-handle-box">
+                <el-button type="primary" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
                 <el-input v-model="searchContant" placeholder="输入姓名，手机号，用户ID" class="p-handle-input mr10"></el-input>
                 <el-button type="primary" class="el-icon-search"  @click="search"></el-button>
                 <el-button type="success" class="el-icon-plus"  @click="addUsers"></el-button>
@@ -24,7 +25,9 @@
                 </el-table-column>
                 <!--<el-table-column prop="registerTime" label="登录密码"  width="150" >-->
                 <!--</el-table-column>-->
-                <el-table-column prop="securityCode" label="验证码"  width="80" >
+                <el-table-column prop="securityCode" label="验证码"  width="100" >
+                </el-table-column>
+                <el-table-column prop="lockTxt" label="是否锁定"  width="80" >
                 </el-table-column>
                 <el-table-column prop="registerTime" label="注册时间" sortable width="180">
                 </el-table-column>
@@ -43,7 +46,7 @@
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination @current-change="handleCurrentChange" layout="prev, pager, next" :total="total">
+                <el-pagination @current-change="handleCurrentChange" layout="prev, pager, next" :total="total" :page-size="pageSize">
                 </el-pagination>
             </div>
         </div>
@@ -68,6 +71,13 @@
                             <!--</el-form-item>-->
                             <el-form-item label="用户ID" required>
                                 <el-input v-model="form.userId"></el-input>
+                            </el-form-item>
+                            <el-form-item label="是否锁住" >
+                                <el-switch
+                                    v-model="form.isLock"
+                                    active-text="是"
+                                    inactive-text="否">
+                                </el-switch>
                             </el-form-item>
                             <el-form-item label="登录密码">
                                 <el-input type="password" v-model="form.pwd"></el-input>
@@ -99,6 +109,8 @@
 
 <script>
     import {post} from '../common/HttpUtils';
+    import {api} from '../common/HttpConfig';
+    import {com} from '../common/Contants';
     export default {
         data: function(){
           return {
@@ -116,12 +128,16 @@
               //  sex: '1',
                 userId: '',
                 pwd: '',
-                confimPwd: ''
+                confimPwd: '',
+                isLock:true
             },
             idx: -1,
             isNewAdd: true,
-            total:0
-            }
+            total: 0,
+            isDeleteAll: false,
+            pageSize: com.x_pagination_size,
+
+        }
         },
         created() {
             this.getData({});
@@ -154,7 +170,7 @@
             // 获取 easy-mock 的模拟数据
             getData(parms) {
                 post({
-                    url: "api/user/list",
+                    url: api.api_user_list,
                     curPage: this.cur_page,
                     data: parms,
                     success: (res) => {
@@ -168,29 +184,30 @@
                     }
                 );
             },
-            search() {
+            search(ars) {
                 this.tableData = []
                 this.is_search = true;
                 this.cur_page = 1
-                console.log("search")
                 this.getData({"searchContant":this.searchContant});
             },
             filterTag(value, row) {
                 return row.tag === value;
             },
-            handleEdit(index, row) {
+           /* handleEdit(index, row) {
 
                 const item = this.tableData[index];
                 this.idx = item.id;
+
                 this.form = {
                     phone: item.userPhone,
               //      sex: item.userSex,
                     userId: item.userId,
                     pwd: '',
-                    confimPwd: ''
+                    confimPwd: '',
+                    isLock: item.isLock*1 == 0?false:true
                 }
                 this.editVisible = true;
-            },
+            },*/
             goEditDetail(index, row) {
                 this.isNewAdd = false
                 // alert(row.name)
@@ -209,7 +226,8 @@
                    // sex: item.userSex,
                     userId: item.userId,
                     pwd: '',
-                    confimPwd: ''
+                    confimPwd: '',
+                    isLock: item.isLock*1 == 0?false:true
                 }
                 this.editVisible = true;
             },
@@ -217,32 +235,35 @@
                 const item = this.tableData[index];
                 this.idx = item.userId;
                 this.delVisible = true;
-
+                this.isDeleteAll = false
             },
             delAll() {
-                const length = this.multipleSelection.length;
-                let str = '';
-                this.del_list = this.del_list.concat(this.multipleSelection);
-                for (let i = 0; i < length; i++) {
-                    str += this.multipleSelection[i].name + ' ';
+                let length = this.multipleSelection.length;
+                if(length <=0 ){
+                    this.$message.warning('请选择要删除的数据');
+                    return;
                 }
-                this.$message.error('删除了' + str);
-                this.multipleSelection = [];
+                this.delVisible = true;
+                this.isDeleteAll = true;
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
             // 保存编辑
             saveEdit() {
+                if(!this.form.name || !this.form.phone || !this.form.userId){
+                    this.$message.error('请填写必须输入项目');
+                    return;
+                }
                 if(this.form.pwd != this.form.confimPwd){
                     this.$message.error('两次输入密码不一致！');
                     return;
                 }
                 let url = '',id=''
                 if(this.isNewAdd){
-                    url = "api/user/add"
+                    url = api.api_user_add
                 }else{
-                    url = "api/user/update"
+                    url = api.api_user_update
                     id = this.idx
                    // this.$set(this.tableData, this.idx, this.form);
                    // this.$message.success(`修改第 ${this.idx+1} 行成功`);
@@ -258,6 +279,7 @@
                       //  "userSex":this.form.sex,
                         "userId":this.form.userId,
                         "password":this.form.pwd,
+                        "isLock": this.form.isLock?1:0
                     },
                     success: (res) => {
                         if (res && res.code > 0) {
@@ -267,36 +289,70 @@
                             }else{
                                 this.$message.success(`修改用户信息 ${this.form.name} 成功！`);
                             }
+                            this.editVisible = false;
+                            this.isNewAdd = false;
                             this.getData({});
+                        }else{
+                            this.$message.error(res.message);
                         }
                     },
                     error: (err) => {
                     }
                     }
                 );
-                this.editVisible = false;
-                this.isNewAdd = false;
+
             },
             // 确定删除
             deleteRow(){
-                post({
-                    url: `/api/user/delete/${this.idx}`,
-                    // curPage: this.cur_page,
-                    data: { },
-                    success: (res) => {
-                        if (res && res.code > 0) {
-                            this.cur_page = 1
-
-                           // this.tableData.splice(this.idx, 1);
-                            this.$message.success('删除成功');
-                            this.delVisible = false;
-                            this.getData({});
-                        }
-                    },
-                    error: (err) => {
+                // 删除全部
+                if(this.isDeleteAll){
+                    let del_list = [];
+                    let length = this.multipleSelection.length;
+                    let str = '';
+                    for (let i = 0; i < length; i++) {
+                        str += this.multipleSelection[i].userName + ' ';
+                        del_list.push(this.multipleSelection[i].userId)
                     }
+                    post({
+                        url: `${api.api_user_delete}`,
+                        // curPage: this.cur_page,
+                        data: { userIds : del_list },
+                        success: (res) => {
+                            if (res && res.code > 0) {
+                                this.cur_page = 1
+                                this.$message.success('删除了' + str);
+                                this.delVisible = false;
+                                this.getData({});
+                            }
+                            this.multipleSelection = [];
+                            this.isDeleteAll = false
+                        },
+                        error: (err) => {
+                        }
+                        }
+                    );
+
+                }else{
+                    this.isDeleteAll = false
+                    post({
+                            url: `${api.api_user_delete}`,
+                            // curPage: this.cur_page,
+                            data: { userIds : [this.idx]},
+                            success: (res) => {
+                                if (res && res.code > 0) {
+                                    this.cur_page = 1
+
+                                    // this.tableData.splice(this.idx, 1);
+                                    this.$message.success('删除成功');
+                                    this.delVisible = false;
+                                    this.getData({});
+                                }
+                            },
+                            error: (err) => {
+                            }
+                        }
+                    );
                 }
-                );
             },
             handleClose(done) {
                 this.$confirm('编辑中，确定关闭吗？', '提示', {
