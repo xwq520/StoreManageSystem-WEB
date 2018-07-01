@@ -2,7 +2,7 @@
     <div >
         <div class="crop-demo" style="margin-bottom: 20px">
             <div style="margin-right: 20px;margin-bottom: 80px;margin-left: 20px">
-                <span style="color:red;">*</span>预览图
+                <span style="color:red;"></span>预览图
             </div>
             <img :src="cropImg" class="pre-img">
             <div class="crop-demo-btn">选择图片
@@ -17,15 +17,20 @@
             </span>
         </el-dialog>
       </div>
-    </div>
 </template>
 
 <script>
     import VueCropper  from 'vue-cropperjs';
     export default {
+        props:{
+            defaultSrc: {
+                type: String,
+                default: './static/img/img.jpg'
+            }
+        },
         data: function(){
             return {
-                defaultSrc: './static/img/img.jpg',
+                // defaultSrc: './static/img/img.jpg',
                 fileList: [],
                 imgSrc: '',
                 cropImg: '',
@@ -51,6 +56,7 @@
             },
             cropImage () {
                 this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+                this.$emit("cropImg",this.cropImg)
             },
             cancelCrop(){
                 this.dialogVisible = false;

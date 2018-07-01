@@ -13,7 +13,7 @@
                 <el-button type="success" class="el-icon-plus"  @click="addUsers"></el-button>
             </div>
 
-            <el-table :data="tableData" height="600" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
+            <el-table :data="tableData" height="700" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" fixed="left"></el-table-column>
                 <el-table-column prop="userName" label="姓名"  width="150">
                 </el-table-column>
@@ -119,7 +119,6 @@
             multipleSelection: [],
             searchContant: '',
             del_list: [],
-            is_search: false,
             editVisible: false,
             delVisible: false,
             form: {
@@ -186,7 +185,6 @@
             },
             search(ars) {
                 this.tableData = []
-                this.is_search = true;
                 this.cur_page = 1
                 this.getData({"searchContant":this.searchContant});
             },
