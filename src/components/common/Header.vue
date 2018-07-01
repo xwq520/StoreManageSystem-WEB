@@ -2,7 +2,7 @@
     <div class="header">
         <!-- 折叠按钮 -->
         <div class="collapse-btn" @click="collapseChage">
-            <i class="el-icon-menu" style="font-size: 44px"></i>
+            <i class="el-icon-info" style="font-size: 44px"></i>
         </div>
         <div class="logo">个人商店管理平台</div>
         <div class="header-right">
@@ -25,7 +25,7 @@
                 <!-- 用户头像 -->
                 <div class="user-avator"><img src="static/img/img.jpg"></div>
                 <!-- 用户名下拉菜单 -->
-                <el-dropdown class="user-name" trigger="click" @command="handleCommand">
+                <el-dropdown class="user-name"   @command="handleCommand">
                     <span class="el-dropdown-link">
                         {{username}} <i class="el-icon-caret-bottom"></i>
                     </span>
@@ -36,6 +36,7 @@
                         <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
                             <el-dropdown-item>项目仓库</el-dropdown-item>
                         </a>-->
+                        <el-dropdown-item divided  command="updatePwd"> 修改密码</el-dropdown-item>
                         <el-dropdown-item divided  command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -66,6 +67,8 @@
                 if(command == 'loginout'){
                     localStorage.removeItem('ms_username')
                     this.$router.push('/login');
+                }else if(command == 'updatePwd'){
+                    alert(333)
                 }
             },
             // 侧边栏折叠
