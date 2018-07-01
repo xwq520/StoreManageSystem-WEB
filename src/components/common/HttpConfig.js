@@ -8,6 +8,8 @@ const api = {
     api_user_add: "api/user/add",
     api_user_update: "api/user/update",
     api_user_delete: '/api/user/delete',
+    // 修改登录密码管理API
+    api_user_changePassowrd: '/api/user/changePassowrd',
 
     // 商品管理API
     api_commodity_list: '/api/commodity/list',
@@ -20,6 +22,9 @@ const api = {
     api_order_add: '/api/order/add',
     api_order_update: '/api/order/update',
     api_order_delete: '/api/order/delete',
+
+
+
 }
 
 export{ api }

@@ -42,17 +42,51 @@
                 </el-dropdown>
             </div>
         </div>
+
+        <!-- 修改密码 -->
+        <el-dialog title="修改登录密码" :visible.sync="editVisible" width="25%">
+            <div>
+                <div class="container">
+                    <div class="form-box">
+                        <el-form ref="form" :model="form" label-width="100px">
+                            <el-form-item label="原密码" required>
+                                <el-input type="password" v-model="form.password" style="width: 200px"></el-input>
+                            </el-form-item>
+                            <el-form-item label="新密码" required>
+                                <el-input type="password" v-model="form.newPassword"style="width: 200px"></el-input>
+                            </el-form-item>
+                            <el-form-item label="确认新密码" required>
+                                <el-input type="password" v-model="form.comfirmPassword" auto-complete="off"style="width: 200px"></el-input>
+                            </el-form-item>
+                            <el-form-item style="margin-top: 20px;">
+                                <el-button type="primary" @click="saveEdit" >确定</el-button>
+                                <el-button @click="editVisible = false" >取消</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                </div>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 <script>
     import bus from '../common/bus';
+    import {post} from '../common/HttpUtils';
+    import {api} from '../common/HttpConfig';
     export default {
         data() {
             return {
                 collapse: false,
                 fullscreen: false,
-                name: 'linxin',
-                message: 2
+                name: '',
+                message: 2,
+                editVisible:false,
+                form: {
+                    password: '',
+                    newPassword: '',
+                    comfirmPassword: '',
+                },
             }
         },
         computed:{
@@ -68,7 +102,12 @@
                     localStorage.removeItem('ms_username')
                     this.$router.push('/login');
                 }else if(command == 'updatePwd'){
-                    alert(333)
+                    this.form={
+                        password: '',
+                        newPassword: '',
+                        comfirmPassword: '',
+                    }
+                    this.editVisible = true
                 }
             },
             // 侧边栏折叠
@@ -102,6 +141,37 @@
                     }
                 }
                 this.fullscreen = !this.fullscreen;
+            },
+            saveEdit(){
+
+                if(!this.form.password || !this.form.newPassword || !this.form.comfirmPassword){
+                    this.$message.error('请须输入密码');
+                    return;
+                }else if(this.form.password == this.form.newPassword){
+                    this.$message.error('新密码与原密码不能相同');
+                    return;
+                }else if(this.form.comfirmPassword != this.form.newPassword){
+                    this.$message.error('新密码与确认密码不一致');
+                    return;
+                }
+                post({
+                    url: api.api_user_changePassowrd,
+                  // curPage: this.cur_page,
+                    data: this.form,
+                    success: (res) => {
+                        if (res && res.code > 0) {
+                            this.$message.success(`登录密码修改成功,请重新登录！`);
+                            localStorage.removeItem('ms_username')
+                            this.$router.push('/login');
+                        }else{
+                            this.$message.error(res.message);
+                        }
+                    },
+                    error: (err) => {
+                      //  this.$message.error(res.massage);
+                    }
+                }
+                );
             }
         }
     }
