@@ -6,6 +6,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
 import "babel-polyfill";
+import {com} from './components/common/Contants';
 
 Vue.use(ElementUI, { size: 'small' });
 
@@ -14,10 +15,6 @@ Vue.use(ElementUI, { size: 'small' });
 axios.defaults.timeout = 60000;
 // axios.defaults.baseURL = 'http://127.0.0.1:8080';
 axios.defaults.headers.common['Authorization'] = 'https://api.example.com';
-axios.defaults.headers.common['x-user-id'] = 'JX000';
-axios.defaults.headers.common['x-pagination-index'] = '0';
-axios.defaults.headers.common['x-pagination-size'] = '10';
-
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
@@ -26,8 +23,8 @@ router.beforeEach((to, from, next) => {
         next('/login');
     }else if(to.meta.permission){
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
-        role === 'admin' ? next() : next('/403');
-        console.log('adminTestToken');
+        role.indexOf(com.roleKey) >=0 ? next() : next('/403');
+        //console.log('adminTestToken');
        // axios.defaults.headers = [{'Authorization':'adminTestToken'},{'workCode':'adminWorkCode'}];
     }else{
         // 简单的判断IE10及以下不进入富文本编辑器，该组件不兼容
@@ -37,7 +34,7 @@ router.beforeEach((to, from, next) => {
             });
         }else{
             //axios.defaults.headers = [{'Authorization':'testToken'},{'workCode':'workCode'}];
-            console.log('TestToken');
+           // console.log('TestToken');
             next();
         }
     }

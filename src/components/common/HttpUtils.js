@@ -7,8 +7,8 @@ export  function post(args){
     if(!args.url){
         return "";
     }
-
-    axios.defaults.headers.common['x-user-id'] = 'JX000';
+    let ms_username = localStorage.getItem('ms_username');
+    axios.defaults.headers.common['x-user-id'] = ms_username;
     axios.defaults.headers.common['x-pagination-index'] = args.curPage?args.curPage-1:0;
     axios.defaults.headers.common['x-pagination-size'] = com.x_pagination_size;
 

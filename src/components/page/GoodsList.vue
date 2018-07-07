@@ -17,13 +17,13 @@
                         :value="item.value">
                     </el-option>
                 </el-select>
-                <el-input v-model="select_word" placeholder="筛选关键词 如：标题" class="handle-input mr10"></el-input>
+                <el-input v-model="select_word" placeholder="商品编号，标题" class="handle-input mr10"></el-input>
                 <el-button type="primary" class="el-icon-search"  @click="search"></el-button>
                 <el-button type="success" class="el-icon-plus"  @click="addGoods"></el-button>
             </div>
             <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55"  fixed="left"></el-table-column>
-                <el-table-column prop="comNo" label="编号"  width="170">
+                <el-table-column prop="comNo" label="商品编号"  width="170">
                 </el-table-column>
                 <el-table-column prop="headline" label="标题"  >
                 </el-table-column>
@@ -392,7 +392,7 @@
                         "inventory": this.form.inventory,
                         "salesVolume": this.form.salesVolume,
                         "manufacturer": this.form.manufacturer,
-                        "commodityStatus": this.form.commodityStatus,
+                        "commodityStatus": this.form.commodityStatus?this.form.commodityStatus:0,
                         "type": this.form.type
                     },
                     success: (res) => {

@@ -16,7 +16,7 @@
                         :value="item.value">
                     </el-option>
                 </el-select>
-                <el-input v-model="select_word" placeholder="筛选关键词 如：商品名称，收货地址" class="handle-input mr10"></el-input>
+                <el-input v-model="select_word" placeholder="订单编号，商品名称，收货地址" class="handle-input mr10"></el-input>
                 <el-button type="primary" class="el-icon-search"  @click="search"></el-button>
             </div>
             <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
@@ -47,6 +47,8 @@
                 </el-table-column>
                 <el-table-column prop="cancelTime" label="取消订单时间"  width="150">
                 </el-table-column>
+                <el-table-column prop="remarks" label="备注" >
+                </el-table-column>
                <!-- <el-table-column prop="date" label="操作者"   width="100">
                 </el-table-column>
                 <el-table-column prop="date" label="操作时间"   width="150">
@@ -71,29 +73,47 @@
                 <div class="container">
                     <div class="form-box">
                         <el-form ref="form" :model="form" label-width="80px">
-                            <el-form-item label="标题" required>
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item label="订单编号" >
+                                 {{form.orderNo}}
                             </el-form-item>
-                            <el-form-item label="子标题" required>
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item label="订单金额" >
+                                <span style="color: red;font-size: 18px">{{form.orderMoney}}</span> 元
+                            </el-form-item>
+                            <el-form-item label="购买数量" >
+                                 <span style="color: red;font-size: 18px">{{form.purchaseQuantity}}</span> 件
+                            </el-form-item>
+                            <el-form-item label="购买商品" >
+                                {{form.commodityName}}
+                            </el-form-item>
+                            <el-form-item label="商品编号" >
+                                {{form.commodityNo}}
+                            </el-form-item>
+                            <el-form-item label="下单时间" >
+                                {{form.orderTime}}
+                            </el-form-item>
+                            <el-form-item label="收货地址" >
+                                {{form.address}}
                             </el-form-item>
 
-                            <el-form-item label="选择器" required>
-                                <el-select v-model="form.region" placeholder="请选择">
-                                    <el-option key="bbk" label="步步高" value="bbk"></el-option>
-                                    <el-option key="xtc" label="小天才" value="xtc"></el-option>
-                                    <el-option key="imoo" label="imoo" value="imoo"></el-option>
+                            <el-form-item label="订单状态" required>
+                                <el-select v-model="form.orderStatus" placeholder="订单状态" size="small" clearable >
+                                    <el-option
+                                        v-for="item in orderStatus"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="日期时间" required>
-                                <el-col :span="11">
-                                    <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-                                </el-col>
-                                <el-col class="line" :span="2">-</el-col>
-                                <el-col :span="11">
-                                    <el-time-picker placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
-                                </el-col>
+                            <el-form-item label="备注">
+                                <el-input
+                                    type="textarea"
+                                    :autosize="{ minRows: 3, maxRows: 4}"
+                                    placeholder="输入备注"
+                                    v-model="form.remarks">
+                                </el-input>
                             </el-form-item>
+
                             <el-form-item style="margin-top: 20px;text-align: right">
                                 <el-button type="primary" @click="saveEdit" >确定</el-button>
                                 <el-button @click="editVisible = false" >取消</el-button>
@@ -118,7 +138,7 @@
         },
         data() {
             return {
-                url: './static/vuetable.json',
+              //  url: './static/vuetable.json',
                 tableData: [],
                 cur_page: 1,
                 multipleSelection: [],
@@ -126,15 +146,20 @@
                 select_word: '',
                 editVisible: false,
                 form: {
+                    orderNo:'',
                     orderTime: '',
                     commodityName: '',
                     address: '',
                     purchaseQuantity:'',// 购买数量
                     orderMoney: '',
                     orderStatus: '',
+                    orderStatusName:'',
                     playTime: '',//支付时间
                     shipmentsTime: '',//发货时间
                     cancelTime: '',
+                    commodityNo:'',
+                    commodityId:'',
+                    remarks:''
                 },
                 orderStatus: [{
                     value: 1,
@@ -147,7 +172,7 @@
                     label: '已发货'
                 }, {
                     value: 4,
-                    label: '已取消订单'
+                    label: '取消订单'
                 }],
                 idx: -1,
                 total: 0,
@@ -189,13 +214,9 @@
             goEditDetail(index, row) {
                // alert(row.name)
               //  this.$router.push({name:'/goodsDetails',params:{"row":row}});
-                this.idx = index;
-                const item = this.tableData[index];
-                this.form = {
-                    name: item.name,
-                    date: item.date,
-                    address: item.address
-                }
+                this.idx = row.id;
+               // const item = this.tableData[index];
+                this.form =  this.tableData[index]
                 this.editVisible = true;
             },
 
@@ -204,16 +225,36 @@
             },
             // 保存编辑
             saveEdit() {
-                this.$set(this.tableData, this.idx, this.form);
-                this.editVisible = false;
-                this.$message.success(`修改第 ${this.idx+1} 行成功`);
+                post({
+                    url: api.api_order_update,
+                    // curPage: this.cur_page,
+                    data: {
+                        "id":this.form.id,
+                        "orderNo":this.form.orderNo,
+                      //  "purchaseQuantity":this.form.purchaseQuantity,
+                        "orderStatus":this.form.orderStatus,
+                        "commodityNo":this.form.commodityNo,
+                        "remarks": this.form.remarks
+                    },
+                    success: (res) => {
+                        if (res && res.code > 0) {
+                            this.editVisible = false;
+                            this.$message.success(`订单修改成功`);
+                            this.getData({});
+                        }else{
+                            this.$message.error(res.message);
+                        }
+                    },
+                    error: (err) => {
+                    }
+                })
             },
             // 确定删除
-            deleteRow(){
+          /*  deleteRow(){
                 this.tableData.splice(this.idx, 1);
                 this.$message.success('删除成功');
                 this.delVisible = false;
-            },
+            },*/
             handleClose(done) {
                 this.$confirm('编辑中，确定关闭吗？', '提示', {
                     confirmButtonText: '确定',
@@ -234,7 +275,10 @@
 
 </script>
 
-<style scoped>
+<style>
+    .el-message-box{
+        border-radius: 0;
+    }
     .handle-box {
         margin-bottom: 20px;
     }

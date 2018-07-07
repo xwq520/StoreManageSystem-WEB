@@ -1,19 +1,19 @@
 <template>
     <div class="login-wrap" :style="pageBg">
         <div class="ms-title" style="margin-top: -177px;color:rgba(0,0,0,.85);font-weight: 600;font-size: 33px">
-          嘟嘟系统管理平台
+          嘟嘟微店系统平台
             <div style="font-size: 14px;color: rgba(0,0,0,.45);margin-top: 10px;">
-                方便，简单，快捷，微系统管理平台</div>
+                方便，简单，快捷，微店管理平台</div>
         </div>
 
         <div class="ms-login">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
                 <el-form-item prop="username" >
-                    <el-input v-model="ruleForm.username" size="medium" placeholder="username" class="input-login"></el-input>
+                    <el-input v-model="ruleForm.username" size="medium" placeholder="用户名" class="input-login"></el-input>
                 </el-form-item>
                 <el-form-item prop="password" >
-                    <el-input type="password" size="medium"
-                              placeholder="password"
+                    <el-input type="password" size="medium" style="margin-top: 15px"
+                              placeholder="密码"
                               v-model="ruleForm.password"
                               @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
@@ -28,12 +28,15 @@
 </template>
 
 <script>
+    import {post} from '../common/HttpUtils';
+    import {api} from '../common/HttpConfig';
+
     export default {
         data: function(){
             return {
                 ruleForm: {
-                    username: 'admin',
-                    password: '123123'
+                    username: '',
+                    password: ''
                 },
                 rules: {
                     username: [
@@ -55,12 +58,35 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/');
+                      //  this.$router.push('/');
                     } else {
-                        console.log('error submit!!');
+                      //  console.log('error submit!!');
                         return false;
                     }
                 });
+                if(!this.ruleForm.username || !this.ruleForm.password){
+                    return;
+                }
+                post({
+                    url: api.api_user_checkUser,
+                    // curPage: 0,
+                    data: {
+                        userId:this.ruleForm.username,
+                        password:this.ruleForm.password
+                    },
+                    success: (res) => {
+                        if (res && res.code > 0) {
+                            localStorage.setItem('ms_username',this.ruleForm.username);
+                            this.$router.push('/');
+                        }else{
+                            this.$message.error("登录异常，请确认输入用户与密码是否正确");
+                        }
+                    },
+                    error: (err) => {
+                    }
+                }
+                );
+
             }
         }
     }

@@ -12,7 +12,7 @@
                                     <div>总销售额(元)</div>
                                     <div class="grid-num"
                                          style="font-size: 25px;color: red;padding-left: 5px;padding-right: 5px;">
-                                        92,234.45</div>
+                                        {{sumMoney}}</div>
                                 </div>
                             </div>
                         </el-card>
@@ -23,7 +23,7 @@
                                 <i class="el-icon-message grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div>待处理订单(件)</div>
-                                    <div class="grid-num">321</div>
+                                    <div class="grid-num">{{waritCount}}</div>
                                 </div>
                             </div>
                         </el-card>
@@ -34,29 +34,24 @@
                                 <i class="el-icon-goods grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div>总销量(件)</div>
-                                    <div class="grid-num">76568</div>
+                                    <div class="grid-num">{{sumCount}}</div>
                                 </div>
                             </div>
                         </el-card>
                     </el-col>
                 </el-row>
-                <el-card shadow="hover" :body-style="{ height: '334px'}">
+                <el-card shadow="hover" :body-style="{ height: '534px'}">
                     <div slot="header" class="clearfix">
-                        <span>待办事项</span>
+                        <span>待办事项(前15)</span>
                         <el-button style="float: right; padding: 3px 0;font-size: 16px;font-weight: bold" type="text">
                             {{systemTime}}
                         </el-button>
                     </div>
-                    <el-table :data="todoList" :show-header="false" height="334" style="width: 100%;font-size:14px;">
-                       <!-- <el-table-column width="40">
-                            <template slot-scope="scope">
-                                <el-checkbox v-model="scope.row.status"></el-checkbox>
-                            </template>
-                        </el-table-column>-->
+                    <el-table :data="todoList" :show-header="false" height="534" style="width: 100%;font-size:14px;">
                         <el-table-column>
                             <template slot-scope="scope">
-                                <div class="todo-item" :class="{'todo-item-del': scope.row.status}">
-                                    {{scope.row.title}}
+                                <div class="todo-item" >
+                                    {{scope.row.commodityName}} （订单号：{{scope.row.orderNo}}）
                                 </div>
                             </template>
                         </el-table-column>
@@ -64,7 +59,8 @@
                             <template slot-scope="scope">
                               <!--  <i class="el-icon-edit"></i>
                                 <i class="el-icon-delete"></i>-->
-                                <div>2018/02/03 12:32</div>
+                                <i>{{scope.row.orderStatusName}}</i>
+                                <div> {{scope.row.orderTime}}</div>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -82,49 +78,19 @@
                                     <div>{{role}}</div>
                                 </div>
                             </div>
-                            <div class="user-info-list">上次登录时间：<span>2018-01-01 12:30:30</span></div>
+                            <div class="user-info-list">便捷，简单，快速，有效的个体微店管理平台</div>
                           <!--  <div class="user-info-list">上次登录地点：<span>杭州</span></div>-->
                         </el-card>
                         <el-card shadow="hover" >
                             <div slot="header" class="clearfix">
-                                <span>销量排行(前10)</span>
+                                <span>销量排行(前20)</span>
                             </div>
                             <div style="font-size: 14px">
-                             <div>
-                                 <span >日本SANA豆乳洗面奶化洗面... </span> <span style="float: right;color: #42b983;">2342件</span>
+                             <div v-for="(order,index) in orderVolumeList">
+                                 <span >{{order.commodityName}}</span> <span>{{order.commodityNo}}</span>
+                                 <span style="float: right;color: #42b983;">{{order.countNum}}件</span>
                              </div>
-                            <div>
-                                <span>日本SANA豆乳洗面奶化洗面... </span> <span style="float: right;color: #42b983;">2342件</span>
                             </div>
-                            <div>
-                                <span>日本SANA豆乳洗面奶化洗面... </span> <span style="float: right;color: #42b983;">2342件</span>
-                            </div>
-                            <div>
-                                <span>日本SANA豆乳洗面奶化洗面... </span> <span style="float: right;color: #42b983;">2342件</span>
-                            </div>
-                            <div>
-                                <span>日本SANA豆乳洗面奶化洗面... </span> <span style="float: right;color: #42b983;">2342件</span>
-                            </div>
-                            <div>
-                                <span>日本SANA豆乳洗面奶化洗面... </span> <span style="float: right;color: #42b983;">2342件</span>
-                            </div>
-                            <div>
-                                <span>日本SANA豆乳洗面奶化洗面... </span> <span style="float: right;color: #42b983;">2342件</span>
-                            </div>
-                            <div>
-                                <span>日本SANA豆乳洗面奶化洗面... </span> <span style="float: right;color: #42b983;">2342件</span>
-                            </div>
-                            <div>
-                                <span>日本SANA豆乳洗面奶化洗面... </span> <span style="float: right;color: #42b983;">2342件</span>
-                            </div>
-                            <div>
-                                <span>日本SANA豆乳洗面奶化洗面... </span> <span style="float: right;color: #42b983;">2342件</span>
-                            </div>
-                            </div>
-                          <!--    <el-progress :percentage="57.2" color="#42b983"></el-progress>-->
-                          <!--   <el-progress :percentage="29.8" color="#f1e05a"></el-progress>-->
-                           <!-- <el-progress :percentage="11.9"></el-progress>-->
-                           <!-- <el-progress :percentage="1.1" color="#f56c6c"></el-progress>-->
                         </el-card>
                     </el-col>
                 </el-row>
@@ -136,61 +102,24 @@
 
 <script>
     import {showLocale} from '../common/DateUtils.js'
+    import {post} from '../common/HttpUtils';
+    import {api} from '../common/HttpConfig';
+    import {com} from '../common/Contants';
     export default {
         data() {
             return {
                 name: localStorage.getItem('ms_username'),
                 systemTime: '',
-                todoList: [
-                    {
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: false,
-                    }, {
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要修复100个bug',
-                        status: true,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: true,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: true,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: true,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: true,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: true,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: true,
-                    },
-                ]
+                todoList: [],
+                orderVolumeList:[],
+                sumCount:'0',
+                sumMoney:'0.00',
+                waritCount:'0',
             }
         },
         computed: {
             role() {
-                return this.name === 'admin' ? '超级管理员' : '普通用户';
+                return this.name.indexOf(com.roleKey)>=0 ? '超级管理员' : '嘟嘟用户';
             }
         },
         created(){
@@ -199,6 +128,8 @@
             setInterval(function () {
                 self.systemTask()
             }, 1000);
+            this.initDatas();
+
         },
         mounted() {
         },
@@ -206,6 +137,51 @@
             systemTask(){
                 let today = new Date();
                 this.systemTime  = showLocale(today);
+            },
+            initDatas(){
+                post({
+                    url: api.api_home_list,
+                   // curPage: 0,
+                     data: {},
+                    success: (res) => {
+                        if (res && res.code > 0) {
+                            this.todoList = res.orderList;
+                            //this.total = res.total;
+                        }
+                    },
+                    error: (err) => {
+                    }
+                    }
+                );
+                post({
+                    url: api.api_home_count,
+                    // curPage: 0,
+                    data: {},
+                    success: (res) => {
+                        if (res && res.code > 0) {
+                            let orderHomeDTO = res.orderHomeDTO;
+                            this.sumCount = orderHomeDTO.sumCount;
+                            this.sumMoney = orderHomeDTO.sumMoney;
+                            this.waritCount = orderHomeDTO.waritCount;
+                        }
+                    },
+                    error: (err) => {
+                    }
+                }
+                );
+                post({
+                    url: api.api_home_volume,
+                    // curPage: 0,
+                    data: {},
+                    success: (res) => {
+                        if (res && res.code > 0) {
+                            this.orderVolumeList = res.orderVolumeList;
+                        }
+                    },
+                    error: (err) => {
+                    }
+                }
+                );
             }
         }
     }
@@ -266,7 +242,7 @@
     }
 
     .grid-con-3 .grid-num {
-        color: rgb(242, 94, 67);
+        color: #eaac0d;
     }
 
     .user-info {

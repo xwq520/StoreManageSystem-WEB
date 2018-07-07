@@ -15,8 +15,9 @@
                 </div>
                 <!-- 消息中心 -->
                 <div class="btn-bell">
-                    <el-tooltip effect="dark" :content="message?`有${message}条未读消息`:`消息中心`" placement="bottom">
-                        <router-link to="/systemmsg">
+                    <el-tooltip effect="dark" :content="message?`有消息提醒`:`消息中心`" placement="bottom">
+                     <!--   <router-link to="/systemmsg">-->
+                            <router-link to="/">
                             <i class="el-icon-bell"></i>
                         </router-link>
                     </el-tooltip>
@@ -80,7 +81,7 @@
                 collapse: false,
                 fullscreen: false,
                 name: '',
-                message: 2,
+                message: '',
                 editVisible:false,
                 form: {
                     password: '',
