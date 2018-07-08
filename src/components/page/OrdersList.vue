@@ -33,6 +33,8 @@
                 </el-table-column>
                 <el-table-column prop="date" label="手机号"   width="120">
                 </el-table-column>-->
+                <el-table-column prop="unitPrice" label="单价" sortable width="100">
+                </el-table-column>
                 <el-table-column prop="purchaseQuantity" label="购买数量" width="100">
                 </el-table-column>
                 <el-table-column prop="orderMoney" label="订单金额" sortable width="100">
@@ -47,7 +49,7 @@
                 </el-table-column>
                 <el-table-column prop="cancelTime" label="取消订单时间"  width="150">
                 </el-table-column>
-                <el-table-column prop="remarks" label="备注" >
+                <el-table-column prop="remarks" label="备注" width="300">
                 </el-table-column>
                <!-- <el-table-column prop="date" label="操作者"   width="100">
                 </el-table-column>
@@ -81,6 +83,9 @@
                             </el-form-item>
                             <el-form-item label="购买数量" >
                                  <span style="color: red;font-size: 18px">{{form.purchaseQuantity}}</span> 件
+                            </el-form-item>
+                            <el-form-item label="单价" >
+                                <span style="color: red;font-size: 18px">{{form.unitPrice}}</span> 元
                             </el-form-item>
                             <el-form-item label="购买商品" >
                                 {{form.commodityName}}
@@ -159,7 +164,8 @@
                     cancelTime: '',
                     commodityNo:'',
                     commodityId:'',
-                    remarks:''
+                    remarks:'',
+                    unitPrice:''
                 },
                 orderStatus: [{
                     value: 1,

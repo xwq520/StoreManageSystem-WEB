@@ -51,11 +51,11 @@
                         <el-table-column>
                             <template slot-scope="scope">
                                 <div class="todo-item" >
-                                    {{scope.row.commodityName}} （订单号：{{scope.row.orderNo}}）
+                                    {{scope.row.commodityName}} (金额：{{scope.row.orderMoney+" 单号：" + scope.row.orderNo}})
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column width="160">
+                        <el-table-column width="180">
                             <template slot-scope="scope">
                               <!--  <i class="el-icon-edit"></i>
                                 <i class="el-icon-delete"></i>-->
@@ -86,7 +86,7 @@
                                 <span>销量排行(前20)</span>
                             </div>
                             <div style="font-size: 14px">
-                             <div v-for="(order,index) in orderVolumeList">
+                             <div v-for="(order,index) in orderVolumeList" style="border-bottom: 1px solid #d2d7da70; margin-bottom: 5px;padding-bottom: 5px;">
                                  <span >{{order.commodityName}}</span> <span>{{order.commodityNo}}</span>
                                  <span style="float: right;color: #42b983;">{{order.countNum}}件</span>
                              </div>

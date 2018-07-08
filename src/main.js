@@ -14,7 +14,7 @@ Vue.use(ElementUI, { size: 'small' });
 // 现在，在超时前，所有请求都会等待 1分钟
 axios.defaults.timeout = 60000;
 // axios.defaults.baseURL = 'http://127.0.0.1:8080';
-axios.defaults.headers.common['Authorization'] = 'https://api.example.com';
+// axios.defaults.headers.common['Authorization'] = 'https://api.example.com';
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
