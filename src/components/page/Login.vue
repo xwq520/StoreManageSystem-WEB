@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap" :style="pageBg">
         <div class="ms-title" style="margin-top: -177px;color:rgba(0,0,0,.85);font-weight: 600;font-size: 33px">
-          嘟嘟微店系统平台
+            嘟嘟微商系统管理平台
             <div style="font-size: 14px;color: rgba(0,0,0,.45);margin-top: 10px;">
                 方便，简单，快捷，微店管理平台</div>
         </div>
@@ -40,10 +40,10 @@
                 },
                 rules: {
                     username: [
-                        { required: true, message: '请输入用户名', trigger: 'blur' }
+                        { required: true, message: '*请输入用户名', trigger: 'blur' }
                     ],
                     password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' }
+                        { required: true, message: '*请输入密码', trigger: 'blur' }
                     ]
                 },
                 pageBg: {

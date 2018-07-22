@@ -4,7 +4,7 @@
         <div class="collapse-btn" @click="collapseChage">
             <i class="el-icon-info" style="font-size: 44px"></i>
         </div>
-        <div class="logo">个人商店管理平台</div>
+        <div class="logo">嘟嘟微商系统管理平台</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
