@@ -51,7 +51,7 @@
                         <el-table-column>
                             <template slot-scope="scope">
                                 <div class="todo-item" >
-                                    {{scope.row.commodityName}} (金额：{{scope.row.orderMoney+" 单号：" + scope.row.orderNo}})
+                                    {{scope.row.commodityName}} (金额：<span style="color: red">{{scope.row.orderMoney}}</span>{{" 单号：" + scope.row.orderNo}})
                                 </div>
                             </template>
                         </el-table-column>
