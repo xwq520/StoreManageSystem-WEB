@@ -48,7 +48,12 @@
                     method: 'post',
                     data: formdata,
                     headers: { 'Content-Type': 'multipart/form-data' },
-                }).then((url) => {
+                }).then((data) => {
+                    console.log(data);
+                    let url = '';
+                    if(data.data.code*1 > 0 ){
+                        url = data.data.mediaFiles.filePath;
+                    }
                     this.$refs.md.$img2Url(pos, url);
                 })
             },
