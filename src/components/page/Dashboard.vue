@@ -88,7 +88,7 @@
                             <div style="font-size: 14px">
                              <div v-for="(order,index) in orderVolumeList" style="border-bottom: 1px solid #d2d7da70; margin-bottom: 5px;padding-bottom: 5px;">
                                  <span >{{order.commodityName}}</span> <span>{{order.commodityNo}}</span>
-                                 <span style="float: right;color: #42b983;">{{order.countNum}}件</span>
+                                 <span style="float: right;color: #eaac0d;">{{order.countNum}}件</span>
                              </div>
                             </div>
                         </el-card>
