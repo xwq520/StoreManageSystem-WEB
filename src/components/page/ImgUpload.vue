@@ -27,6 +27,10 @@
             defaultSrc: {
                 type: String,
                 default: './static/img/img.jpg'
+            },
+            type: {
+                type: String,
+                default: ''
             }
         },
         data: function(){
@@ -57,7 +61,7 @@
             },
             cropImage () {
                 this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
-                this.$emit("cropImg",this.cropImg)
+                this.$emit("cropImg",[this.cropImg,this.type])
             },
             cancelCrop(){
                 this.dialogVisible = false;

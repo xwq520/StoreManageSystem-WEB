@@ -25,7 +25,7 @@
                 </el-table-column>
                 <!--<el-table-column prop="registerTime" label="登录密码"  width="150" >-->
                 <!--</el-table-column>-->
-                <el-table-column prop="securityCode" label="验证码"  width="100" >
+                <el-table-column prop="codeKey" label="秘钥Key"  width="250" >
                 </el-table-column>
                 <el-table-column prop="lockTxt" label="是否锁定"  width="80" >
                 </el-table-column>

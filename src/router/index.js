@@ -40,6 +40,11 @@ export default new Router({
                     component: resolve => require(['../components/page/SystemMsg.vue'], resolve),
                     meta: { title: '消息提醒' }
                 },
+                {
+                    path: '/sets',
+                    component: resolve => require(['../components/page/Sets.vue'], resolve),
+                    meta: { title: '平台设置' }
+                },
                /* {
                     path: '/form',
                     component: resolve => require(['../components/page/BaseForm.vue'], resolve),

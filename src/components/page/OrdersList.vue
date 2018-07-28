@@ -188,6 +188,14 @@
         created() {
             this.getData({});
         },
+        watch:{
+            // refresh page datas
+            $route(newValue, oldValue){
+                if(newValue.fullPath === '/orderslist'){
+                    this.getData({});
+                }
+            }
+        },
         methods: {
             // 分页导航
             handleCurrentChange(val) {

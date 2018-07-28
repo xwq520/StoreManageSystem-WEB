@@ -353,7 +353,7 @@
                 this.multipleSelection = val;
             },
             cropImg(data){
-                this.form.previewImg = data
+                this.form.previewImg = data[0]
             },
             editorChange(data){
                 this.form.commodityDetails = data.render

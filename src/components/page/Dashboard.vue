@@ -78,8 +78,11 @@
                                     <div>{{role}}</div>
                                 </div>
                             </div>
-                            <div class="user-info-list">便捷，简单，快速，有效的个体微店管理平台</div>
-                          <!--  <div class="user-info-list">上次登录地点：<span>杭州</span></div>-->
+                            <div class="user-info-list">便捷，简单，快速，有效个体微商系统管理平台</div>
+                            <div class="user-info-list">移动端商店(复制发送手机)：
+                                <a :href="mobileUrl" target="_blank">
+                                    {{mobileUrl}}
+                                </a></div>
                         </el-card>
                         <el-card shadow="hover" >
                             <div slot="header" class="clearfix">
@@ -90,6 +93,9 @@
                                  <span >{{order.commodityName}}</span> <span>{{order.commodityNo}}</span>
                                  <span style="float: right;color: #eaac0d;">{{order.countNum}}件</span>
                              </div>
+                                <div style="color: #909399;text-align: -webkit-center" v-show="orderVolumeList.length <=0">
+                                    暂无数据
+                                </div>
                             </div>
                         </el-card>
                     </el-col>
@@ -115,11 +121,20 @@
                 sumCount:'0',
                 sumMoney:'0.00',
                 waritCount:'0',
+                mobileUrl:''
             }
         },
         computed: {
             role() {
                 return this.name.indexOf(com.roleKey)>=0 ? '超级管理员' : '嘟嘟用户';
+            }
+        },
+        watch:{
+            // refresh page datas
+            $route(newValue, oldValue){
+                if(newValue.fullPath === '/dashboard'){
+                    this.initDatas();
+                }
             }
         },
         created(){
@@ -129,7 +144,9 @@
                 self.systemTask()
             }, 1000);
             this.initDatas();
+            let ms_usercodekey = localStorage.getItem('ms_usercodekey');
 
+            this.mobileUrl = com.mobileUrl + ms_usercodekey;
         },
         mounted() {
         },

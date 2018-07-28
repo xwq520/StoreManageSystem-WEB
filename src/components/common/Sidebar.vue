@@ -25,6 +25,7 @@
 
 <script>
     import bus from '../common/bus';
+    import {com} from '../common/Contants';
     export default {
         data() {
             return {
@@ -47,8 +48,8 @@
                     },
                     {
                         icon: 'el-icon-setting',
-                        index: 'permission',
-                        title: '用户管理'
+                        index: 'sets',
+                        title: '平台设置'
                     },
                     /*  {
                         icon: 'el-icon-date',
@@ -73,26 +74,7 @@
                             }
                         ]
                     },
-                  {
-                        icon: 'el-icon-star-on',
-                        index: 'charts',
-                        title: 'schart图表'
-                    },
-                    {
-                        icon: 'el-icon-rank',
-                        index: 'drag',
-                        title: '拖拽列表'
-                    },
-                    {
-                        icon: 'el-icon-warning',
-                        index: 'permission',
-                        title: '权限测试'
-                    },
-                    {
-                        icon: 'el-icon-error',
-                        index: '404',
-                        title: '404页面'
-                    }*/
+                 */
                 ]
             }
         },
@@ -102,6 +84,16 @@
             }
         },
         created(){
+            // 动态加载菜单 系统管理员有用户管理菜单
+            let username = localStorage.getItem('ms_username');
+            if(username.indexOf(com.roleKey)>=0){
+                let sysMenu = {
+                    icon: 'el-icon-news',
+                    index: 'permission',
+                    title: '用户管理'
+                }
+                this.items.push(sysMenu);
+            }
             // 通过 Event Bus 进行组件间通信，来折叠侧边栏
             bus.$on('collapse', msg => {
                 this.collapse = msg;

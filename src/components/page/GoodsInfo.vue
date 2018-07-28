@@ -44,7 +44,7 @@
                 formdata.append('file', $file);
                 // 这里没有服务器供大家尝试，可将下面上传接口替换为你自己的服务器接口
                 this.$axios({
-                    url: '/api/commodity/mediaFiles',
+                    url: '/api/oss/putObject',
                     method: 'post',
                     data: formdata,
                     headers: { 'Content-Type': 'multipart/form-data' },
@@ -52,7 +52,7 @@
                     console.log(data);
                     let url = '';
                     if(data.data.code*1 > 0 ){
-                        url = data.data.mediaFiles.filePath;
+                        url = data.data.file.filePath;
                     }
                     this.$refs.md.$img2Url(pos, url);
                 })
