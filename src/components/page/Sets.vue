@@ -9,7 +9,7 @@
     <table>
         <tr>
             <td>
-            <div style="color: red">（重要）请在下面图片选择框，设置您个人收款二维码。此设置将在用户支付时使用</div>
+            <div style="color: red">（重要）请设置您的收款二维码。此设置将在用户移动端支付时显示并使用。</div>
             <div style="margin-top: 40px;margin-bottom: 20px;color: #20a0ff">微信收款二维码</div>
             <v-img-upload @cropImg = "cropImg" ref="wxplay" type = "wxplay" :defaultSrc = "form.wxplay"></v-img-upload>
             <div style="margin-top: 40px;margin-bottom: 20px;color: #20a0ff">支付宝收款二维码</div>
@@ -19,7 +19,7 @@
                 <el-button >取消</el-button>
             </div>
             </td>
-            <td style="padding-left: 100px;"><div>移动端显示事例：</div>
+            <td style="padding-left: 200px;"><div>移动端显示事例：</div>
                 <div><img  style="height: 450px;margin-top: 10px" src="../../assets/qrcode-play.png"/></div>
             </td>
         </tr>
@@ -55,8 +55,8 @@
         methods: {
             // 获取 easy-mock 的模拟数据
             getData(parms) {
-                this.form.wxplay = localStorage.getItem(com.play1);
-                this.form.zfbplay = localStorage.getItem(com.play2)
+                this.form.wxplay = localStorage.getItem(com.play1).replace('null','');
+                this.form.zfbplay = localStorage.getItem(com.play2).replace('null','');
             },
             cropImg(data){
                 if(data[1] === 'wxplay'){
@@ -67,7 +67,7 @@
             },
             // 保存编辑
             saveEdit() {
-                if(!this.form.wxplay || !this.form.zfbplay){
+                if(!this.form.wxplay && !this.form.zfbplay){
                     this.$message.error('请上传收款二维码');
                     return;
                 }

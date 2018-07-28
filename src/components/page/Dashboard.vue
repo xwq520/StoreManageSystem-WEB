@@ -133,7 +133,8 @@
             // refresh page datas
             $route(newValue, oldValue){
                 if(newValue.fullPath === '/dashboard'){
-                    this.initDatas();
+                    this.$router.replace('/','');
+                    //this.initDatas();
                 }
             }
         },
