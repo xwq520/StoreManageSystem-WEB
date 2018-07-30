@@ -14,8 +14,8 @@
             </div>
 
             <el-table :data="tableData" height="700" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
-                <el-table-column type="selection" width="55" fixed="left"></el-table-column>
-                <el-table-column prop="userName" label="姓名"  width="150">
+                <el-table-column type="selection" width="55" ></el-table-column>
+                <el-table-column prop="userName" label="姓名"  width="150" fixed="left">
                 </el-table-column>
                 <el-table-column prop="userPhone" label="手机号" width="150">
                 </el-table-column>
@@ -25,11 +25,17 @@
                 </el-table-column>
                 <!--<el-table-column prop="registerTime" label="登录密码"  width="150" >-->
                 <!--</el-table-column>-->
-                <el-table-column prop="codeKey" label="秘钥Key"  width="250" >
+                <el-table-column prop="codeKey" label="秘钥Key"  width="300" >
                 </el-table-column>
                 <el-table-column prop="lockTxt" label="是否锁定"  width="80" >
                 </el-table-column>
+                <el-table-column prop="other" label="联系方式" width="200" >
+                </el-table-column>
+                <el-table-column prop="remarks" label="备注"  width="180" >
+                </el-table-column>
                 <el-table-column prop="registerTime" label="注册时间" sortable width="180">
+                </el-table-column>
+                <el-table-column prop="expireTime" label="到期时间" sortable width="180">
                 </el-table-column>
                 <el-table-column prop="lastTime" label="最后登录时间" width="180">
                 </el-table-column>
@@ -37,7 +43,7 @@
                 <!--</el-table-column>-->
                 <!--<el-table-column prop="updateTime" label="更新时间"   width="180">-->
                 <!--</el-table-column>-->
-                <el-table-column label="操作"  fixed="right">
+                <el-table-column label="操作"  fixed="right" width="150">
                     <template slot-scope="scope">
                         <!--   <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
                         <el-button size="small" @click="goEditDetail(scope.$index, scope.row)">编辑</el-button>
@@ -85,6 +91,17 @@
                             <el-form-item label="确认密码">
                                 <el-input type="password" v-model="form.confimPwd" auto-complete="off"></el-input>
                             </el-form-item>
+                            <el-form-item label="联系方式" >
+                                <el-input v-model="form.other" placeholder="如：微信号:XXX，QQ:XXX，微博等:XXX"></el-input>
+                            </el-form-item>
+                            <el-form-item label="备注说明">
+                                <el-input
+                                    type="textarea"
+                                    :autosize="{ minRows: 2, maxRows: 4}"
+                                    placeholder="备注说明"
+                                    v-model="form.remarks">
+                                </el-input>
+                            </el-form-item>
                             <el-form-item style="margin-top: 20px;text-align: right">
                                 <el-button type="primary" @click="saveEdit" >确定</el-button>
                                 <el-button @click="editVisible = false" >取消</el-button>
@@ -128,7 +145,9 @@
                 userId: '',
                 pwd: '',
                 confimPwd: '',
-                isLock:true
+                isLock:true,
+                remarks:'',
+                other:''
             },
             idx: -1,
             isNewAdd: true,
@@ -225,7 +244,9 @@
                     userId: item.userId,
                     pwd: '',
                     confimPwd: '',
-                    isLock: item.isLock*1 == 0?false:true
+                    isLock: item.isLock*1 == 0?false:true,
+                    remarks: item.remarks,
+                    other: item.other
                 }
                 this.editVisible = true;
             },
@@ -277,7 +298,9 @@
                       //  "userSex":this.form.sex,
                         "userId":this.form.userId,
                         "password":this.form.pwd,
-                        "isLock": this.form.isLock?1:0
+                        "isLock": this.form.isLock?1:0,
+                       "remarks": this.form.remarks,
+                        "other": this.form.other
                     },
                     success: (res) => {
                         if (res && res.code > 0) {
@@ -371,9 +394,15 @@
                 this.isNewAdd = true;
                 this.form = {
                     name: '',
-                    date: '',
-                    address: ''
-                }
+                    phone: '',
+                    //  sex: '1',
+                    userId: '',
+                    pwd: '',
+                    confimPwd: '',
+                    isLock:false,
+                    remarks:'',
+                    other:''
+                },
                 this.editVisible = true;
             },
         }

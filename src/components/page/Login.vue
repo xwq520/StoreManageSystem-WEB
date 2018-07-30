@@ -79,9 +79,8 @@
                     success: (res) => {
                         if (res && res.code > 0) {
                             localStorage.setItem('ms_username',this.ruleForm.username);
-                            localStorage.setItem('ms_usercodekey',res.codeKey);
-                            localStorage.setItem(com.play1,res.play1);
-                            localStorage.setItem(com.play2,res.play2);
+                            localStorage.setItem('ms_usercodekey',res.userinfo.codeKey);
+                            localStorage.setItem(com.x_userinfoPC,JSON.stringify(res.userinfo));
                             this.$router.push('/');
                         }else{
                             this.$message.error("登录异常，请确认输入用户与密码是否正确");

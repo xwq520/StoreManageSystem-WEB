@@ -47,7 +47,7 @@
                             {{systemTime}}
                         </el-button>
                     </div>
-                    <el-table :data="todoList" :show-header="false" height="534" style="width: 100%;font-size:14px;">
+                    <el-table :data="todoList" :show-header="false" height="534">
                         <el-table-column>
                             <template slot-scope="scope">
                                 <div class="todo-item" >
@@ -133,8 +133,10 @@
             // refresh page datas
             $route(newValue, oldValue){
                 if(newValue.fullPath === '/dashboard'){
-                    this.$router.replace('/','');
-                    //this.initDatas();
+                    let self = this
+                   setTimeout(function () {
+                       self.initDatas();
+                   },100)
                 }
             }
         },
@@ -147,7 +149,7 @@
             this.initDatas();
             let ms_usercodekey = localStorage.getItem('ms_usercodekey');
 
-            this.mobileUrl = com.mobileUrl + ms_usercodekey;
+            this.mobileUrl = com.mobileUrl + ms_usercodekey + '#/wecome';
         },
         mounted() {
         },

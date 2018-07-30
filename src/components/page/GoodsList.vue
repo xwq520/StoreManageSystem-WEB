@@ -23,7 +23,7 @@
             </div>
             <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55"  fixed="left"></el-table-column>
-                <el-table-column prop="comNo" label="商品编号"  width="170">
+                <el-table-column prop="comNo" label="商品编号"  width="170" fixed="left">
                 </el-table-column>
                 <el-table-column prop="headline" label="标题"  >
                 </el-table-column>
@@ -43,7 +43,7 @@
                 </el-table-column>
                 <el-table-column prop="salesVolume" sortable label="销量" width="100">
                 </el-table-column>
-                <el-table-column prop="manufacturer" label="生产厂家" >
+                <el-table-column prop="manufacturer" label="生产厂家" width="300">
                 </el-table-column>
                 <el-table-column prop="commodityStatusName" label="状态" width="100">
                 </el-table-column>
@@ -51,7 +51,7 @@
                 </el-table-column>
                 <el-table-column prop="updateTime" label="操作时间"   width="150">
                 </el-table-column>-->
-                <el-table-column label="操作" fixed="right">
+                <el-table-column label="操作" fixed="right" width="150">
                     <template slot-scope="scope">
                      <!--   <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
                         <el-button size="small" @click="goEditDetail(scope.$index, scope.row)">编辑</el-button>
@@ -257,7 +257,7 @@
             // 分页导航
             handleCurrentChange(val) {
                 this.cur_page = val;
-                this.getData({});
+                this.getData({"commodityStatus":this.select_status,"searchContant":this.select_word});
             },
             // 获取 easy-mock 的模拟数据
             getData(parms) {

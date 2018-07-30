@@ -20,7 +20,7 @@
                 <el-button type="primary" class="el-icon-search"  @click="search"></el-button>
             </div>
             <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
-                <el-table-column prop="orderNo" label="订单编号" fixed width="170">
+                <el-table-column prop="orderNo" label="订单编号" width="170" fixed="left">
                 </el-table-column>
                 <el-table-column prop="orderTime" label="下单时间" sortable  width="150">
                 </el-table-column>
@@ -192,7 +192,10 @@
             // refresh page datas
             $route(newValue, oldValue){
                 if(newValue.fullPath === '/orderslist'){
-                    this.getData({});
+                    let self = this
+                    setTimeout(function () {
+                        self.getData({});
+                    },100)
                 }
             }
         },
@@ -200,7 +203,7 @@
             // 分页导航
             handleCurrentChange(val) {
                 this.cur_page = val;
-                this.getData({});
+                this.getData({"orderStatus":this.select_status,"searchContant":this.select_word});
             },
             // 获取 easy-mock 的模拟数据
             getData(parms) {

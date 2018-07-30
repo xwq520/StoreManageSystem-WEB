@@ -5,9 +5,8 @@
 const com = {
     x_pagination_size: 15,
     roleKey:'adminWX',
-    play1:'play1',
-    play2:'play2',
-    mobileUrl: 'http://www.minidp.top/#/wecome?codeKey='
+    x_userinfoPC:'x_userinfoPC',
+    mobileUrl: 'http://www.minidp.top/?codesign='
 }
 
 export{ com }
