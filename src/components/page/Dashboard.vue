@@ -114,7 +114,7 @@
     export default {
         data() {
             return {
-                name: localStorage.getItem('ms_username'),
+                name: '',//localStorage.getItem('ms_username'),
                 systemTime: '',
                 todoList: [],
                 orderVolumeList:[],
@@ -141,6 +141,9 @@
             }
         },
         created(){
+            let userInfo = JSON.parse(localStorage.getItem(com.x_userinfoPC));
+            this.name = userInfo.name;
+
             this.systemTime = showLocale(new Date());
             let self = this
             setInterval(function () {

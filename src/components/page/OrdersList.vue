@@ -305,8 +305,8 @@
     }
 
     .handle-input {
-        width: 300px;
-        display: inline-block;
+        width: 300px !important;
+        display: inline-block!important;
     }
     .del-dialog-cnt{
         font-size: 16px;

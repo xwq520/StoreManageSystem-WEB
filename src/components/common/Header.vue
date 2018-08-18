@@ -75,6 +75,7 @@
     import bus from '../common/bus';
     import {post} from '../common/HttpUtils';
     import {api} from '../common/HttpConfig';
+    import {com} from '../common/Contants';
     export default {
         data() {
             return {
@@ -92,7 +93,9 @@
         },
         computed:{
             username(){
-                let username = localStorage.getItem('ms_username');
+                let userInfo = JSON.parse(localStorage.getItem(com.x_userinfoPC));
+                let username = userInfo.name;
+               // let username = localStorage.getItem('ms_username');
                 return username ? username : this.name;
             }
         },
